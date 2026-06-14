@@ -29,23 +29,47 @@ async function renderPdfToImages(pdfUrl) {
 
   const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
   const images = [];
+  let firstPageRatio = 0.707;
 
   for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
     statusEl.textContent = `Loading page ${pageNumber} of ${pdf.numPages}…`;
 
     const page = await pdf.getPage(pageNumber);
-    const viewport = page.getViewport({ scale: 1.6 });
+    const viewport = page.getViewport({ scale: 1.8 });
+
+    if (pageNumber === 1) {
+      firstPageRatio = viewport.width / viewport.height;
+    }
+
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
 
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+    canvas.width = Math.floor(viewport.width);
+    canvas.height = Math.floor(viewport.height);
 
     await page.render({ canvasContext: context, viewport }).promise;
-    images.push(canvas.toDataURL('image/jpeg', 0.9));
+    images.push(canvas.toDataURL('image/jpeg', 0.92));
   }
 
-  return images;
+  return { images, firstPageRatio };
+}
+
+function getBookSize(ratio) {
+  const isLandscape = ratio > 1;
+
+  if (isLandscape) {
+    const width = 820;
+    return {
+      width,
+      height: Math.round(width / ratio)
+    };
+  }
+
+  const height = 640;
+  return {
+    width: Math.round(height * ratio),
+    height
+  };
 }
 
 function updateStatus(pageFlip) {
@@ -56,16 +80,17 @@ function updateStatus(pageFlip) {
 
 async function start() {
   try {
-    const images = await renderPdfToImages(PDF_URL);
+    const { images, firstPageRatio } = await renderPdfToImages(PDF_URL);
+    const bookSize = getBookSize(firstPageRatio);
 
     if (!window.St || !window.St.PageFlip) {
       throw new Error('PageFlip library did not load.');
     }
 
     const pageFlip = new St.PageFlip(bookEl, {
-      width: 420,
-      height: 594,
-      size: 'stretch',
+      width: bookSize.width,
+      height: bookSize.height,
+      size: 'fixed',
       minWidth: 260,
       maxWidth: 1000,
       minHeight: 360,
