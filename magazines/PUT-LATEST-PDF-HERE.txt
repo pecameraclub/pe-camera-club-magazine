@@ -1,0 +1,1 @@
+Put your magazine PDF in this folder and rename it to latest.pdf

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PE Camera Club Magazine</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PE Camera Club</p>
+        <h1 id="magazine-title">Monthly Magazine</h1>
+      </div>
+      <a class="button" id="download-link" href="magazines/latest.pdf" target="_blank" rel="noopener">Download PDF</a>
+    </header>
+
+    <section class="controls" aria-label="Flipbook controls">
+      <button id="prev" type="button">← Previous</button>
+      <span id="page-status">Loading magazine…</span>
+      <button id="next" type="button">Next →</button>
+    </section>
+
+    <section class="viewer-wrap">
+      <div id="book"></div>
+      <div id="message" class="message" hidden></div>
+    </section>
+
+    <footer class="footer">
+      <p>Having trouble viewing the magazine? <a id="fallback-link" href="magazines/latest.pdf" target="_blank" rel="noopener">Open the PDF directly</a>.</p>
+    </footer>
+  </main>
+
+  <!-- PDF.js renders each PDF page into an image. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- StPageFlip gives the page-turning effect. -->
+  <script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
