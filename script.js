@@ -57,13 +57,12 @@ async function renderPdfToImages(pdfUrl) {
 function getBookSize(ratio) {
   const isLandscape = ratio > 1;
 
-  if (isLandscape) {
-    const width = 820;
-    return {
-      width,
-      height: Math.round(width / ratio)
-    };
-  }
+ if (isLandscape) {
+  return {
+    width: 900,
+    height: 506
+  };
+}
 
   const height = 640;
   return {
