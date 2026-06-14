@@ -60,7 +60,7 @@ function getBookSize(ratio) {
  if (isLandscape) {
   return {
     width: 900,
-    height: 506
+    height: 636
   };
 }
 
